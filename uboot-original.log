@@ -1,0 +1,62 @@
+U-Boot 1.1.3 (Nov 15 2013 - 14:58:27)
+
+Board: Ralink APSoC DRAM:  128 MB
+relocate_code Pointer at: 87f78000
+enable ephy clock...done. rf reg 29 = 5
+SSC disabled.
+******************************
+Software System Reset Occurred
+******************************
+spi_wait_nsec: 29 
+spi device id: 20 20 13 10 0 (20131000)
+find flash: M25P40
+raspi_read: from:30000 len:1000 
+raspi_read: from:30000 len:1000 
+failed to receive message from mcu
+============================================ 
+Ralink UBoot Version: 4.1.1.0
+-------------------------------------------- 
+ASIC 7620_MP (Port5<->None)
+DRAM component: 1024 Mbits DDR, width 16
+DRAM bus: 16 bit
+Total memory: 128 MBytes
+Flash component: SPI Flash
+Date:Nov 15 2013  Time:14:58:27
+============================================ 
+icache: sets:512, ways:4, linesz:32 ,total:65536
+dcache: sets:256, ways:4, linesz:32 ,total:32768 
+
+ ##### The CPU freq = 580 MHZ #### 
+ estimate memory size =128 Mbytes
+
+Please choose the operation: 
+   1: Load system code to SDRAM via TFTP. 
+   2: Load system code then write to Flash via TFTP. 
+   3: Boot system code via Flash (default).
+   4: Entr boot command line interface.
+   5: Boot system code via MMC.
+   6: Load system code then write to MMC via TFTP. 
+   9: Load Boot Loader code then write to Flash via TFTP. 
+ 0 
+raspi_read: from:40028 len:6 
+
+   5: Boot system code via MMC.
+[SD0] Bus Width: 1
+[SD0] SET_CLK(260kHz): SCLK(255kHz) MODE(0) DDR(0) DIV(47) DS(1) RS(1)
+[SD0] Switch to High-Speed mode!
+[SD0] SET_CLK(260kHz): SCLK(255kHz) MODE(0) DDR(0) DIV(47) DS(1) RS(1)
+[SD0] Bus Width: 4
+[SD0] Size: 3728 MB, Max.Speed: 52000 kHz, blklen(512), nblks(7634944), ro(2)
+[SD0] Initialized
+[SD0] SET_CLK(48000kHz): SCLK(48000kHz) MODE(1) DDR(0) DIV(0) DS(1) RS(1)
+Loading kernel information from MMC: kernel name: Linux-2.6.36+, size : 0x17aeae
+Loading kernel image from MMC
+...............................
+Kernel image loaded
+## Booting image at 80a00000 ...
+   Image Name:   Linux-2.6.36+
+   Image Type:   MIPS Linux Kernel Image (gzip compressed)
+   Data Size:    1552046 Bytes =  1.5 MB
+   Load Address: 80000000
+   Entry Point:  8000c310
+   Verifying Checksum ... Bad Data CRC
