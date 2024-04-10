@@ -1,0 +1,169 @@
+#include "mt7620a.dtsi"
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
+/ {
+	compatible = "ralink,mt7620a-evb", "ralink,mt7620a-soc";
+	model = "Koukaam NETIO 4";
+
+	keys {
+		compatible = "gpio-keys";
+
+		s2 {
+			label = "S2";
+			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
+			linux,code = <BTN_0>;
+		};
+
+		s3 {
+			label = "S3";
+			gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+			linux,code = <BTN_1>;
+		};
+	};
+
+        mmc_fixed_3v3: fixedregulator@0 {
+            compatible = "regulator-fixed";
+            regulator-name = "mmc_power";
+            regulator-min-microvolt = <3300000>;
+            regulator-max-microvolt = <3300000>;
+            enable-active-high;
+            regulator-always-on;
+        };
+
+        mmc_fixed_1v8_io: fixedregulator@1 {
+            compatible = "regulator-fixed";
+            regulator-name = "mmc_io";
+            regulator-min-microvolt = <1800000>;
+            regulator-max-microvolt = <1800000>;
+            enable-active-high;
+            regulator-always-on;
+        };
+
+        clk48m: clk48m@0 {
+            compatible = "fixed-clock";
+            clock-frequency = <48000000>;
+            #clock-cells = <0>;
+        };
+
+};
+
+&spi0 {
+	status = "okay";
+
+	flash@0 {
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		spi-max-frequency = <10000000>;
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			partition@0 {
+				label = "u-boot";
+				reg = <0x0 0x30000>;
+				read-only;
+			};
+
+			partition@30000 {
+				label = "u-boot-env";
+				reg = <0x30000 0x10000>;
+				read-only;
+			};
+
+			factory: partition@40000 {
+				label = "factory";
+				reg = <0x40000 0x10000>;
+				read-only;
+			};
+
+			partition@50000 {
+				compatible = "denx,uimage";
+				label = "firmware";
+				reg = <0x50000 0x7b0000>;
+			};
+		};
+	};
+};
+
+&state_default {
+	gpio {
+		groups = "i2c", "uartf";
+		function = "gpio";
+	};
+};
+
+&ethernet {
+	pinctrl-names = "default";
+	pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
+
+	mediatek,portmap = "llllw";
+
+	port@4 {
+		status = "okay";
+		phy-mode = "rgmii";
+		phy-handle = <&phy4>;
+	};
+
+	port@5 {
+		status = "disabled";
+		phy-mode = "rgmii";
+		phy-handle = <&phy5>;
+	};
+
+	mdio-bus {
+		status = "okay";
+
+		phy4: ethernet-phy@4 {
+			reg = <4>;
+			phy-mode = "rgmii";
+		};
+
+		phy5: ethernet-phy@5 {
+			reg = <5>;
+			phy-mode = "rgmii";
+		};
+	};
+};
+
+&gsw {
+	mediatek,port4-gmac;
+	mediatek,ephy-base = /bits/ 8 <8>;
+};
+
+&sdhci {
+    compatible = "mediatek,mt7620-mmc";
+    bus-width = <4>;
+    non-removable;
+    clocks = <&clk48m>, <&sysc 3>;
+    clock-names = "source", "hclk";
+    status = "okay";
+    pinctrl-names = "default", "state_uhs";
+    pinctrl-0 = <&sdhci_pins>;
+    pinctrl-1 = <>;
+    vmmc-supply = <&mmc_fixed_3v3>;
+    vqmmc-supply = <&mmc_fixed_3v3>;
+    //vqmmc-supply = <&mmc_fixed_1v8_io>;
+    //mmc-hs200-1_8v;
+    //cap-mmc-highspeed;
+    max-frequency = <12000000>;
+};
+
+&gdma {
+	status = "okay";
+};
+
+&pcie {
+	status = "okay";
+};
+
+&ehci {
+	status = "okay";
+};
+
+&ohci {
+	status = "okay";
+};
